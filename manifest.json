@@ -1,7 +1,7 @@
 {
   "name": "Meu Financeiro",
   "short_name": "Financeiro",
-  "start_url": "./index.html",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#f0f2f5",
   "theme_color": "#1a1a1a",
@@ -9,12 +9,14 @@
     {
       "src": "icone.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "icone.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
