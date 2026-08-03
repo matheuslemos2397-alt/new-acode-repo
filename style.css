@@ -1,0 +1,70 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { font-family: Arial, sans-serif; background-color: #f0f2f5; padding: 20px; color: #333; padding-bottom: 50px; }
+
+header { margin-bottom: 30px; }
+h2 { color: #1a1a1a; text-align: center; margin-bottom: 10px; }
+
+p { font-size: 18px; text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+#saldo-visual { display: block; color: #0056b3; font-size: 32px; margin-top: 10px; transition: filter 0.3s ease; }
+#btn-privacidade { background: none; border: none; font-size: 1.5rem; padding: 0; width: auto; color: #333; cursor: pointer; }
+
+.area-lancamento { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+input { width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; }
+
+.botoes-acao { display: flex; gap: 10px; }
+button { flex: 1; padding: 15px; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
+
+.btn-entrada { background-color: #28a745; }
+.btn-entrada:active { background-color: #218838; }
+.btn-saida { background-color: #dc3545; }
+.btn-saida:active { background-color: #c82333; }
+
+/* ESTILOS DE MÚLTIPLOS COFRES */
+.card-cofre { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center; border: 1px solid #e9ecef; }
+.cofre-topo { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.cofre-topo h3 { margin-bottom: 0; text-align: left; font-size: 18px; color: #1a1a1a; }
+.botoes-topo-cofre { display: flex; gap: 5px; }
+
+.btn-icone { background: transparent; border: none; font-size: 18px; cursor: pointer; padding: 5px; color: #6c757d; width: auto; }
+.btn-icone.lixeira { color: #dc3545; }
+
+.valores-cofre { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 15px; }
+.valores-cofre p { padding: 0; box-shadow: none; background: transparent; text-align: left; font-size: 14px; }
+.valores-cofre p:last-child { text-align: right; }
+
+.progresso-container { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+progress { flex: 1; height: 18px; border-radius: 10px; -webkit-appearance: none; appearance: none; }
+progress::-webkit-progress-bar { background-color: #e9ecef; border-radius: 10px; }
+progress::-webkit-progress-value { background-color: #0056b3; border-radius: 10px; }
+.porcentagem-txt { font-weight: bold; color: #333; font-size: 14px; width: 45px; text-align: right; }
+
+.estimativa { color: #0056b3; font-size: 14px; margin-bottom: 15px; padding: 10px; background: #e6f2ff; border-radius: 8px; box-shadow: none; text-align: center; font-weight: 500; line-height: 1.4; }
+
+.btn-cofre { background-color: #ffc107; color: #333; }
+.btn-cofre:active { background-color: #e0a800; }
+
+/* EXTRATO */
+.btn-compacto { background-color: #6c757d; color: white; padding: 10px; font-size: 14px; margin-top: 15px; width: 100%; border-radius: 8px; border: none; font-weight: bold; }
+.btn-compacto:active { background-color: #5a6268; }
+.card-extrato { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 20px; transition: opacity 0.3s ease; }
+.card-extrato h3 { color: #1a1a1a; margin-bottom: 15px; font-size: 18px; text-align: center; }
+#lista-extrato { list-style: none; padding: 0; margin: 0; }
+#lista-extrato li { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; font-size: 15px; }
+#lista-extrato li:last-child { border-bottom: none; }
+.extrato-info { display: flex; flex-direction: column; flex: 1; }
+.extrato-descricao { font-weight: bold; color: #333; }
+.extrato-data { font-size: 12px; color: #888; margin-top: 4px; }
+.extrato-valor { font-weight: bold; margin-right: 10px; }
+.valor-entrada { color: #28a745; }
+.valor-saida { color: #dc3545; }
+.btn-lixeira { background: transparent; border: none; color: #dc3545; font-size: 1.2rem; padding: 5px; width: auto; cursor: pointer; opacity: 0.7; }
+.btn-lixeira:active { opacity: 1; transform: scale(0.9); }
+
+/* JANELA MODAL E PRIVACIDADE */
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(2px); z-index: 2000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s ease-in-out; display: none; }
+.modal-overlay.show { opacity: 1; }
+.modal-box { background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transform: scale(0.8); transition: transform 0.2s ease-in-out; }
+.modal-overlay.show .modal-box { transform: scale(1); }
+.modo-privacidade-ativo { filter: blur(6px); user-select: none; opacity: 0.6; }

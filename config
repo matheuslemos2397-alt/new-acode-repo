@@ -1,0 +1,7 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+[remote "origin"]
+	url = https://github.com/matheuslemos2397-alt/Controle-Financeiro-.git
+	fetch = +refs/heads/*:refs/remotes/origin/*

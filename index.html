@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a1a"> 
+    <title>Meu Financeiro</title>
+    <link rel="stylesheet" href="style.css">
+        <!-- Conecta o Manifesto -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icone.png">
+
+</head>
+<body>
+
+       <header>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h2 style="margin-bottom: 0;">Visão Geral</h2>
+            <div style="display: flex; gap: 15px;">
+                <!-- NOVO BOTÃO DE SINCRONIZAÇÃO -->
+                <button onclick="sincronizarPlanilha()" id="btn-sync" title="Fazer Backup na Nuvem" style="background: none; border: none; font-size: 1.5rem; padding: 0; width: auto; color: #059669; cursor: pointer;">☁️</button>
+                <button onclick="togglePrivacidade()" id="btn-privacidade" title="Modo Privacidade" style="background: none; border: none; font-size: 1.5rem; padding: 0; width: auto; color: #333; cursor: pointer;">👁️</button>
+            </div>
+        </div>
+        <p>Saldo Atual: <strong id="saldo-visual">R$ 0,00</strong></p>
+    </header>
+
+
+    <main>
+        <section class="area-lancamento">
+            <input type="text" id="descricao-transacao" placeholder="O que foi? (ex: Gasolina, Lanche)">
+            <input type="number" id="valor-transacao" inputmode="decimal" step="0.01" placeholder="Valor (R$)">
+            
+            <div class="botoes-acao">
+                <button class="btn-saida" onclick="registrarTransacao('saida')">Registrar Gasto</button>
+                <button class="btn-entrada" onclick="registrarTransacao('entrada')">Registrar Entrada</button>
+            </div>
+
+            <button class="btn-compacto" onclick="toggleExtrato()">Ver Histórico</button>
+        </section>
+
+        <section id="area-extrato" class="card-extrato" style="display: none;">
+            <h3>Últimas Movimentações</h3>
+            <ul id="lista-extrato"></ul>
+        </section>
+
+        <!-- NOVA ESTRUTURA: Container de Múltiplas Metas -->
+        <section id="metas-container" style="margin-top: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="color: #1a1a1a; margin-bottom: 0;">Meus Objetivos</h3>
+                <button class="btn-entrada" onclick="criarNovaMeta()" style="padding: 8px 15px; width: auto; font-size: 14px; border-radius: 20px;">+ Nova Meta</button>
+            </div>
+            
+            <!-- Os cartões de metas vão aparecer aqui dentro automaticamente -->
+            <div id="lista-cofres"></div>
+        </section>
+    </main>
+
+    <!-- Janela Customizada (Modal) -->
+    <div id="meuModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 id="modal-titulo" style="margin-bottom: 15px; color: #1a1a1a;">Título</h3>
+            <div id="modal-conteudo"></div>
+            <div class="botoes-acao" style="margin-top: 15px;">
+                <button class="btn-compacto" onclick="fecharModal()" style="margin-top: 0;">Cancelar</button>
+                <button class="btn-entrada" id="btn-modal-confirmar" style="margin-top: 0;">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+    <script src="app.js?v=3"></script>
+</body>
+</html>
