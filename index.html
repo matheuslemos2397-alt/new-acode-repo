@@ -2,73 +2,131 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#1a1a1a"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="description" content="Controle financeiro pessoal completo, offline e com backup na nuvem.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Meu Financeiro</title>
-    <link rel="stylesheet" href="style.css">
-        <!-- Conecta o Manifesto -->
-   <link rel="manifest" href="manifest.json?v=4">
+    <link rel="manifest" href="manifest.json?v=5">
     <link rel="apple-touch-icon" href="icone.png">
-
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
-       <header>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <h2 style="margin-bottom: 0;">Visão Geral</h2>
-            <div style="display: flex; gap: 15px;">
-                <!-- NOVO BOTÃO DE SINCRONIZAÇÃO -->
-                <button onclick="sincronizarPlanilha()" id="btn-sync" title="Fazer Backup na Nuvem" style="background: none; border: none; font-size: 1.5rem; padding: 0; width: auto; color: #059669; cursor: pointer;">☁️</button>
-                <button onclick="togglePrivacidade()" id="btn-privacidade" title="Modo Privacidade" style="background: none; border: none; font-size: 1.5rem; padding: 0; width: auto; color: #333; cursor: pointer;">👁️</button>
+    <div id="toast-container"></div>
+
+    <header class="glass">
+        <div class="header-top">
+            <div class="brand">
+                <span class="logo">💰</span>
+                <h1>Meu Financeiro</h1>
+            </div>
+            <div class="header-actions">
+                <button onclick="app.exportarJSON()" title="Exportar dados" class="btn-icon">📥</button>
+                <label title="Importar dados" class="btn-icon" style="position:relative; overflow:hidden;">
+                    📤
+                    <input type="file" id="importar-arquivo" accept=".json" onchange="app.importarJSON(this)" style="position:absolute; left:-999px;">
+                </label>
+                <button onclick="app.togglePrivacidade()" id="btn-privacidade" class="btn-icon" title="Modo Privacidade">👁️</button>
             </div>
         </div>
-        <p>Saldo Atual: <strong id="saldo-visual">R$ 0,00</strong></p>
+        
+        <div class="saldo-box">
+            <span class="saldo-label">Saldo disponível</span>
+            <strong id="saldo-visual" class="saldo-valor">R$ 0,00</strong>
+            <div class="saldo-resumo">
+                <span class="receita-mes">↑ R$ 0,00</span>
+                <span class="despesa-mes">↓ R$ 0,00</span>
+            </div>
+        </div>
     </header>
 
-
     <main>
-        <section class="area-lancamento">
-            <input type="text" id="descricao-transacao" placeholder="O que foi? (ex: Gasolina, Lanche)">
-            <input type="number" id="valor-transacao" inputmode="decimal" step="0.01" placeholder="Valor (R$)">
-            
+        <!-- Lançamento rápido -->
+        <section class="card glass">
+            <h3>Nova Movimentação</h3>
+            <div class="form-grid">
+                <input type="text" id="descricao-transacao" placeholder="Descrição (ex: Gasolina)">
+                <select id="categoria-transacao">
+                    <option value="outros">📦 Outros</option>
+                    <option value="alimentacao">🍔 Alimentação</option>
+                    <option value="transporte">🚗 Transporte</option>
+                    <option value="moradia">🏠 Moradia</option>
+                    <option value="lazer">🎉 Lazer</option>
+                    <option value="saude">⚕️ Saúde</option>
+                    <option value="salario">💼 Salário</option>
+                    <option value="investimento">📈 Investimento</option>
+                </select>
+                <input type="date" id="data-transacao">
+                <input type="number" id="valor-transacao" inputmode="decimal" step="0.01" placeholder="R$ 0,00">
+            </div>
             <div class="botoes-acao">
-                <button class="btn-saida" onclick="registrarTransacao('saida')">Registrar Gasto</button>
-                <button class="btn-entrada" onclick="registrarTransacao('entrada')">Registrar Entrada</button>
+                <button class="btn-saida" onclick="app.registrarTransacao('saida')">
+                    <span>Registrar Gasto</span>
+                </button>
+                <button class="btn-entrada" onclick="app.registrarTransacao('entrada')">
+                    <span>Registrar Entrada</span>
+                </button>
             </div>
-
-            <button class="btn-compacto" onclick="toggleExtrato()">Ver Histórico</button>
         </section>
 
-        <section id="area-extrato" class="card-extrato" style="display: none;">
-            <h3>Últimas Movimentações</h3>
-            <ul id="lista-extrato"></ul>
+        <!-- Extrato -->
+        <section class="card glass">
+            <div class="section-header">
+                <h3>📋 Extrato</h3>
+                <div class="filtros">
+                    <select id="filtro-mes" onchange="app.carregarExtrato()">
+                        <option value="todos">Todos os meses</option>
+                    </select>
+                    <button class="btn-compacto" onclick="app.toggleExtrato()" id="btn-toggle-extrato">Ver Histórico</button>
+                </div>
+            </div>
+            <div id="area-extrato" style="display:none;">
+                <div class="extrato-stats" id="extrato-stats"></div>
+                <ul id="lista-extrato"></ul>
+                <div id="extrato-vazio" class="vazio" style="display:none;">
+                    <p>Nenhuma transação neste período.</p>
+                </div>
+            </div>
         </section>
 
-        <!-- NOVA ESTRUTURA: Container de Múltiplas Metas -->
-        <section id="metas-container" style="margin-top: 30px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="color: #1a1a1a; margin-bottom: 0;">Meus Objetivos</h3>
-                <button class="btn-entrada" onclick="criarNovaMeta()" style="padding: 8px 15px; width: auto; font-size: 14px; border-radius: 20px;">+ Nova Meta</button>
+        <!-- Metas -->
+        <section id="metas-container">
+            <div class="section-header">
+                <h3>🎯 Meus Objetivos</h3>
+                <button class="btn-nova-meta" onclick="app.criarNovaMeta()">+ Nova Meta</button>
             </div>
-            
-            <!-- Os cartões de metas vão aparecer aqui dentro automaticamente -->
             <div id="lista-cofres"></div>
+            <div id="cofres-vazio" class="vazio">
+                <p>Você ainda não tem metas. Que tal criar uma? 🚀</p>
+            </div>
+        </section>
+
+        <!-- Backup -->
+        <section class="card glass backup-section">
+            <h3>☁️ Backup na Nuvem</h3>
+            <p class="hint">Configure sua URL do SheetDB nas configurações do app.</p>
+            <div class="botoes-acao">
+                <button class="btn-compacto" onclick="app.sincronizarPlanilha('enviar')">⬆️ Enviar Backup</button>
+                <button class="btn-compacto" onclick="app.sincronizarPlanilha('restaurar')">⬇️ Restaurar Backup</button>
+            </div>
         </section>
     </main>
 
-    <!-- Janela Customizada (Modal) -->
+    <!-- Modal -->
     <div id="meuModal" class="modal-overlay">
-        <div class="modal-box">
-            <h3 id="modal-titulo" style="margin-bottom: 15px; color: #1a1a1a;">Título</h3>
+        <div class="modal-box glass">
+            <h3 id="modal-titulo">Título</h3>
             <div id="modal-conteudo"></div>
-            <div class="botoes-acao" style="margin-top: 15px;">
-                <button class="btn-compacto" onclick="fecharModal()" style="margin-top: 0;">Cancelar</button>
-                <button class="btn-entrada" id="btn-modal-confirmar" style="margin-top: 0;">Confirmar</button>
+            <div class="modal-actions">
+                <button class="btn-compacto" onclick="app.fecharModal(false)">Cancelar</button>
+                <button class="btn-entrada" id="btn-modal-confirmar">Confirmar</button>
             </div>
         </div>
     </div>
 
-    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
-    <script src="app.js?v=4"></script>
+    <script src="https://unpkg.com/dexie@3.2.4/dist/dexie.min.js"></script>
+    <script src="app.js?v=5"></script>
 </body>
 </html>

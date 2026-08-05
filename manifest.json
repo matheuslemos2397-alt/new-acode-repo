@@ -1,10 +1,13 @@
 {
   "name": "Meu Financeiro",
   "short_name": "Financeiro",
+  "description": "Controle financeiro pessoal com metas, extrato e backup na nuvem.",
   "start_url": ".",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#f0f2f5",
-  "theme_color": "#1a1a1a",
+  "theme_color": "#0f172a",
+  "categories": ["finance", "productivity"],
   "icons": [
     {
       "src": "icone.png",
