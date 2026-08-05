@@ -45,11 +45,20 @@ class AppFinanceiro {
         await this.carregarCofres();
         this.preencherFiltroMeses();
         
-        // Registra SW
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(console.error);
-        }
+// Registra o Service Worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+            .then((reg) => {
+                console.log('[App] SW registrado:', reg.scope);
+            })
+            .catch((err) => {
+                console.error('[App] Falha ao registrar SW:', err);
+            });
+    });
     }
+ }    
+
 
     // ============================
     // UTILITÁRIOS
